@@ -1,5 +1,6 @@
 package com.ecommerceproject.project.Services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.context.annotation.Primary;
@@ -21,7 +22,13 @@ public class FakeStoreProductService implements ProductService {
 
     @Override
     public List<Product> getAllProducts() {
-        throw new UnsupportedOperationException("Unimplemented method 'getAllProducts'");
+        ResponseEntity<fakeStoreProductDto[]> responseEntity=restTemplate.getForEntity("https://fakestoreapi.com/products",fakeStoreProductDto[].class);
+        fakeStoreProductDto[] fakeStoreProductDtos=responseEntity.getBody();
+        List<Product> products=new ArrayList<>();
+        for(fakeStoreProductDto dto:fakeStoreProductDtos){
+            products.add(convertFakeStoreDtoToProduct(dto));
+        }
+        return products;
     }
 
     @Override
@@ -47,12 +54,27 @@ public class FakeStoreProductService implements ProductService {
 
     @Override
     public Product createProduct(Product product) {
-        throw new UnsupportedOperationException("Unimplemented method 'createProduct'");
+        return null;
     }
 
     @Override
     public Product replaceProduct(Long productId, Product product) {
-        throw new UnsupportedOperationException("Unimplemented method 'replaceProduct'");
+        return null;
+    }
+    private Product convertFakeStoreDtoToProduct(fakeStoreProductDto dto){
+        if(dto==null){
+            return null;
+        }
+        Product product=new Product();
+        product.setTitle(dto.getTitle());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setImageUrl(dto.getImageUrl());
+        Category category=new Category();
+        category.setTitle(dto.getCategory());
+        product.setCategory(category);
+        product.setId(dto.getId());
+        return product;
     }
     
 }

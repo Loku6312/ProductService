@@ -27,12 +27,12 @@ public class ProductController {
     public Product getSingleProduct(@PathVariable("productId") Long productId) {
         return productService.getSinglProduct(productId);
     }
-    @GetMapping("")
+    @GetMapping()
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
 
-    @PostMapping("")
+    @PostMapping()
     public Product createProduct(@RequestBody Product product) {
         return productService.createProduct(product);
     }
