@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.ecommerceproject.project.DTOS.fakeStoreProductDto;
+import com.ecommerceproject.project.Exceptions.ProductNotFoundException;
 import com.ecommerceproject.project.models.Category;
 import com.ecommerceproject.project.models.Product;
 
@@ -32,13 +33,13 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public Product getSinglProduct(Long productId) {
+    public Product getSinglProduct(Long productId) throws ProductNotFoundException {
 
         
         //make a http call to fakeStore api to get the product with the given id
         ResponseEntity<fakeStoreProductDto> responseEntity=restTemplate.getForEntity("https://fakestoreapi.com/products/"+productId,fakeStoreProductDto.class);
         fakeStoreProductDto fakeProductDto=responseEntity.getBody();
-        Product product=new Product();
+        /*Product product=new Product();
         product.setTitle(fakeProductDto.getTitle());
         product.setDescription(fakeProductDto.getDescription());
         product.setPrice(fakeProductDto.getPrice());
@@ -47,7 +48,11 @@ public class FakeStoreProductService implements ProductService {
         category.setTitle(fakeProductDto.getCategory());
         product.setCategory(category);
         product.setId(productId);
-        return product;
+        return product;*/
+        if(fakeProductDto==null){
+            throw new ProductNotFoundException(productId);
+        }
+        return convertFakeStoreDtoToProduct(fakeProductDto);
 
         //throw new UnsupportedOperationException("Unimplemented method 'getSinglProduct'");
     }
@@ -62,9 +67,9 @@ public class FakeStoreProductService implements ProductService {
         return null;
     }
     private Product convertFakeStoreDtoToProduct(fakeStoreProductDto dto){
-        if(dto==null){
+        /*if(dto==null){
             return null;
-        }
+        }*/
         Product product=new Product();
         product.setTitle(dto.getTitle());
         product.setDescription(dto.getDescription());
