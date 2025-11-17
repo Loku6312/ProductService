@@ -2,10 +2,16 @@ package com.ecommerceproject.project.models;
 
 import java.util.Date;
 
-import lombok.Data;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
+@MappedSuperclass
 public class BaseModel {
+    @Id
     private Long id;
     private Date createdAt;
     private  Date updatedAt;
